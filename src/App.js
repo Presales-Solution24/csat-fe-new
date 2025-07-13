@@ -7,7 +7,7 @@ import ProjectSatisfactionPage from "./pages/ProjectSatisfactionForm";
 import ProjectSatisfactionList from "./pages/ProjectSatisfactionList";
 import ProjectScoringForm from "./pages/ProjectScoringForm";
 import ProjectReviewPDF from "./pages/ProjectReviewPDF";
-import Redirector from "./pages/Redirector"; // tambahkan import ini
+import Redirector from "./pages/Redirector";
 
 function App() {
   return (

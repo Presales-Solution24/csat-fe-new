@@ -18,8 +18,8 @@ import {
 import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
-  Assessment as SurveyIcon,
-  BarChart as ResultIcon,
+  ListAlt as ListAltIcon,
+  AddCircleOutline as AddCircleOutlineIcon,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
 import { useState } from "react";
@@ -31,9 +31,16 @@ const drawerWidth = 260;
 
 const menuItems = [
   { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
-  { text: "Project Satisfaction", icon: <SurveyIcon />, path: "/project-satisfaction" },
-  { text: "Survey", icon: <SurveyIcon />, path: "/survey" },
-  { text: "Hasil", icon: <ResultIcon />, path: "/hasil" },
+  {
+    text: "Project Satisfaction List",
+    icon: <ListAltIcon />,
+    path: "/project-satisfaction-list",
+  },
+  {
+    text: "Add Project Satisfaction",
+    icon: <AddCircleOutlineIcon />,
+    path: "/project-satisfaction",
+  },
   { text: "Logout", icon: <LogoutIcon />, path: "/logout" },
 ];
 
@@ -42,7 +49,7 @@ export default function MainLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
-//   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  //   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -93,7 +100,12 @@ export default function MainLayout({ children }) {
           const isActive = location.pathname === item.path;
           return (
             <ListItem key={item.text} disablePadding>
-              <Tooltip title={item.text} placement="right" arrow disableInteractive>
+              <Tooltip
+                title={item.text}
+                placement="right"
+                arrow
+                disableInteractive
+              >
                 <ListItemButton
                   onClick={() => handleNavigate(item.path)}
                   sx={{
@@ -111,7 +123,9 @@ export default function MainLayout({ children }) {
                   }}
                 >
                   <ListItemIcon
-                    sx={{ color: isActive ? theme.palette.primary.main : "inherit" }}
+                    sx={{
+                      color: isActive ? theme.palette.primary.main : "inherit",
+                    }}
                   >
                     {item.icon}
                   </ListItemIcon>
@@ -160,7 +174,10 @@ export default function MainLayout({ children }) {
       </AppBar>
 
       {/* Sidebar */}
-      <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      >
         <Drawer
           variant="temporary"
           open={mobileOpen}

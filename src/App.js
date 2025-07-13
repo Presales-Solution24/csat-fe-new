@@ -4,12 +4,21 @@ import RegisterPage from "./pages/RegisterPage";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProjectSatisfactionPage from "./pages/ProjectSatisfactionForm";
+import ProjectSatisfactionList from "./pages/ProjectSatisfactionList";
+import ProjectScoringForm from "./pages/ProjectScoringForm";
+import ProjectReviewPDF from "./pages/ProjectReviewPDF";
+import Redirector from "./pages/Redirector"; // tambahkan import ini
 
 function App() {
   return (
     <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Redirector />} />
+
       <Route path="/" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+
+      {/* Protected Routes */}
       <Route
         path="/dashboard"
         element={
@@ -18,11 +27,45 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      {/* Project Satisfaction Routes */}
       <Route
         path="/project-satisfaction"
         element={
           <ProtectedRoute>
             <ProjectSatisfactionPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/project-satisfaction/edit"
+        element={
+          <ProtectedRoute>
+            <ProjectSatisfactionPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/project-satisfaction-list"
+        element={
+          <ProtectedRoute>
+            <ProjectSatisfactionList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/project-scoring"
+        element={
+          <ProtectedRoute>
+            <ProjectScoringForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/project-review-pdf"
+        element={
+          <ProtectedRoute>
+            <ProjectReviewPDF />
           </ProtectedRoute>
         }
       />

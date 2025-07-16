@@ -13,6 +13,12 @@ import {
   ListItemText,
   Divider,
   Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
   useMediaQuery,
 } from "@mui/material";
 import {
@@ -25,7 +31,7 @@ import {
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-import logo from "../assets/euat_logo.png"; // Logo e-uat
+import logo from "../assets/euat_logo.png";
 
 const drawerWidth = 260;
 
@@ -46,10 +52,10 @@ const menuItems = [
 
 export default function MainLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
-  //   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -57,11 +63,21 @@ export default function MainLayout({ children }) {
 
   const handleNavigate = (path) => {
     if (path === "/logout") {
-      localStorage.removeItem("username");
-      navigate("/");
+      setOpenLogoutDialog(true); // buka dialog konfirmasi logout
     } else {
       navigate(path);
     }
+  };
+
+  const handleConfirmLogout = () => {
+    localStorage.removeItem("username");
+    localStorage.removeItem("token");
+    setOpenLogoutDialog(false);
+    navigate("/", { replace: true });
+  };
+
+  const handleCancelLogout = () => {
+    setOpenLogoutDialog(false);
   };
 
   const username = localStorage.getItem("username") || "User";
@@ -146,82 +162,100 @@ export default function MainLayout({ children }) {
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    <>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
 
-      {/* AppBar */}
-      <AppBar
-        position="fixed"
-        elevation={1}
-        sx={{
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          background: "linear-gradient(90deg, #1976d2, #42a5f5)",
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+        {/* AppBar */}
+        <AppBar
+          position="fixed"
+          elevation={1}
+          sx={{
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+            background: "linear-gradient(90deg, #1976d2, #42a5f5)",
+          }}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap sx={{ fontWeight: 600 }}>
+              e-UAT Portal
+            </Typography>
+          </Toolbar>
+        </AppBar>
+
+        {/* Sidebar */}
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        >
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{ keepMounted: true }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": { width: drawerWidth, pt: 8 },
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap sx={{ fontWeight: 600 }}>
-            e-UAT Portal
-          </Typography>
-        </Toolbar>
-      </AppBar>
+            {drawerContent}
+          </Drawer>
 
-      {/* Sidebar */}
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      >
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }}
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: "none", sm: "block" },
+              "& .MuiDrawer-paper": {
+                width: drawerWidth,
+                backgroundColor: "#fefefe",
+                boxShadow: "2px 0 5px rgba(0,0,0,0.1)",
+                pt: 8,
+              },
+            }}
+            open
+          >
+            {drawerContent}
+          </Drawer>
+        </Box>
+
+        {/* Main Content */}
+        <Box
+          component="main"
           sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": { width: drawerWidth, pt: 8 },
+            flexGrow: 1,
+            p: 3,
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            backgroundColor: "#f4f6f8",
+            minHeight: "100vh",
           }}
         >
-          {drawerContent}
-        </Drawer>
-
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              width: drawerWidth,
-              backgroundColor: "#fefefe",
-              boxShadow: "2px 0 5px rgba(0,0,0,0.1)",
-              pt: 8,
-            },
-          }}
-          open
-        >
-          {drawerContent}
-        </Drawer>
+          <Toolbar />
+          {children}
+        </Box>
       </Box>
 
-      {/* Main Content */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          backgroundColor: "#f4f6f8",
-          minHeight: "100vh",
-        }}
-      >
-        <Toolbar />
-        {children}
-      </Box>
-    </Box>
+      {/* Konfirmasi Logout */}
+      <Dialog open={openLogoutDialog} onClose={handleCancelLogout}>
+        <DialogTitle>Konfirmasi Logout</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Apakah Anda yakin ingin keluar dari sesi login?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelLogout}>Batal</Button>
+          <Button onClick={handleConfirmLogout} color="error" variant="contained">
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

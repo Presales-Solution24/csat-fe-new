@@ -1,3 +1,5 @@
+// src/App.js
+
 import { Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -7,14 +9,11 @@ import ProjectSatisfactionPage from "./pages/ProjectSatisfactionForm";
 import ProjectSatisfactionList from "./pages/ProjectSatisfactionList";
 import ProjectScoringForm from "./pages/ProjectScoringForm";
 import ProjectReviewPDF from "./pages/ProjectReviewPDF";
-import Redirector from "./pages/Redirector";
 
 function App() {
   return (
     <Routes>
       {/* Public Routes */}
-      <Route path="/" element={<Redirector />} />
-
       <Route path="/" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
@@ -27,8 +26,6 @@ function App() {
           </ProtectedRoute>
         }
       />
-
-      {/* Project Satisfaction Routes */}
       <Route
         path="/project-satisfaction"
         element={

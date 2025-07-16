@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  Container, TextField, Button, Typography, Box, Link, Alert,
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Link,
+  Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
@@ -9,6 +15,14 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
+
+  // 🔐 Langsung redirect jika token ada di localStorage
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const handleLogin = async () => {
     const { username, password } = form;
@@ -20,8 +34,8 @@ export default function LoginPage() {
     try {
       const res = await API.post("/login", { username, password });
 
-      // Simpan data login ke localStorage jika diperlukan
       localStorage.setItem("username", res.data.username);
+      localStorage.setItem("token", res.data.token);
 
       navigate("/dashboard");
     } catch (err) {
@@ -38,14 +52,26 @@ export default function LoginPage() {
       {error && <Alert severity="error">{error}</Alert>}
 
       <TextField
-        fullWidth label="Username" margin="normal"
-        value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })}
+        fullWidth
+        label="Username"
+        margin="normal"
+        value={form.username}
+        onChange={(e) => setForm({ ...form, username: e.target.value })}
       />
       <TextField
-        fullWidth label="Password" type="password" margin="normal"
-        value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}
+        fullWidth
+        label="Password"
+        type="password"
+        margin="normal"
+        value={form.password}
+        onChange={(e) => setForm({ ...form, password: e.target.value })}
       />
-      <Button fullWidth variant="contained" sx={{ mt: 2 }} onClick={handleLogin}>
+      <Button
+        fullWidth
+        variant="contained"
+        sx={{ mt: 2 }}
+        onClick={handleLogin}
+      >
         Login
       </Button>
       <Box textAlign="center" mt={2}>

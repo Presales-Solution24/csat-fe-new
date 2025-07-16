@@ -184,7 +184,7 @@ export default function ProjectSatisfactionList() {
                             </Box>
                           )}
                         </TableCell>
-                        <TableCell>{project.score || "-"}</TableCell>
+                        <TableCell>{project.rating || "-"}</TableCell>
                         <TableCell>
                           <Box display="flex" gap={1} flexWrap="wrap">
                             <Button

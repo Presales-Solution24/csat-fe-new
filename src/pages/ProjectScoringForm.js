@@ -26,10 +26,15 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import MainLayout from "../components/MainLayout";
 import API from "../services/api";
+// ... (semua import sebelumnya tetap)
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function ProjectScoringForm() {
   const [projectId, setProjectId] = useState(null);
   const [formData, setFormData] = useState({});
+  const [scoringToken, setScoringToken] = useState(null);
+  const [showQR, setShowQR] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -57,7 +62,7 @@ export default function ProjectScoringForm() {
         ...data,
         approved: data.approved ?? 0,
       });
-      // Tampilkan tombol View PDF jika sudah disetujui dan ada rating
+      setScoringToken(data.scoring_token); // ← Tambahkan ini
       if (data.approved === 1 && data.rating) {
         setShowViewPdfButton(true);
       }
@@ -95,8 +100,6 @@ export default function ProjectScoringForm() {
         message: "Scoring berhasil disimpan",
         severity: "success",
       });
-
-      // Jika sudah approved dan ada rating, tampilkan tombol PDF
       if (formData.approved === 1 && formData.rating) {
         setShowViewPdfButton(true);
       }
@@ -124,6 +127,19 @@ export default function ProjectScoringForm() {
     </Grid>
   );
 
+  const publicLink = scoringToken
+    ? `${window.location.origin}/public-scoring-form?token=${scoringToken}`
+    : "";
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(publicLink);
+    setSnackbar({
+      open: true,
+      message: "Link berhasil disalin!",
+      severity: "success",
+    });
+  };
+
   return (
     <MainLayout>
       <Container maxWidth="md">
@@ -131,7 +147,6 @@ export default function ProjectScoringForm() {
           Scoring
         </Typography>
 
-        {/* Tombol Kembali */}
         <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
@@ -141,7 +156,6 @@ export default function ProjectScoringForm() {
           Kembali ke Formulir Project
         </Button>
 
-        {/* Informasi Project, Customer, dan Task */}
         <Paper sx={{ p: 3, mb: 4 }}>
           <Typography variant="h6" gutterBottom>
             Informasi Project
@@ -188,8 +202,7 @@ export default function ProjectScoringForm() {
           ))}
         </Paper>
 
-        {/* Section Scoring */}
-        <Paper sx={{ p: 3 }}>
+        <Paper sx={{ p: 3, mb: 4 }}>
           <Typography variant="h6" gutterBottom>
             Input Scoring
           </Typography>
@@ -260,10 +273,40 @@ export default function ProjectScoringForm() {
                 View PDF
               </Button>
             </Grid>
+            {scoringToken && (
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  onClick={() => setShowQR(!showQR)}
+                  color="info"
+                >
+                  {showQR ? "Sembunyikan QR" : "Generate QR Link"}
+                </Button>
+              </Grid>
+            )}
           </Grid>
+
+          {showQR && scoringToken && (
+            <Paper sx={{ mt: 3, p: 2, textAlign: "center" }}>
+              <QRCodeSVG value={publicLink} size={180} />
+              <Typography
+                variant="body2"
+                sx={{ mt: 2, wordBreak: "break-word" }}
+              >
+                {publicLink}
+              </Typography>
+              <Button
+                startIcon={<ContentCopyIcon />}
+                variant="text"
+                onClick={handleCopyLink}
+                sx={{ mt: 1 }}
+              >
+                Salin Link
+              </Button>
+            </Paper>
+          )}
         </Paper>
 
-        {/* Dialog Konfirmasi */}
         <Dialog
           open={confirmDialogOpen}
           onClose={() => setConfirmDialogOpen(false)}
@@ -286,7 +329,6 @@ export default function ProjectScoringForm() {
           </DialogActions>
         </Dialog>
 
-        {/* Snackbar */}
         <Snackbar
           open={snackbar.open}
           autoHideDuration={3000}

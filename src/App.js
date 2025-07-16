@@ -9,6 +9,7 @@ import ProjectSatisfactionPage from "./pages/ProjectSatisfactionForm";
 import ProjectSatisfactionList from "./pages/ProjectSatisfactionList";
 import ProjectScoringForm from "./pages/ProjectScoringForm";
 import ProjectReviewPDF from "./pages/ProjectReviewPDF";
+import PublicScoringForm from "./pages/PublicScoringForm";
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="/public-scoring-form" element={<PublicScoringForm />} />
     </Routes>
   );
 }

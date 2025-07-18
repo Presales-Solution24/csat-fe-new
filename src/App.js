@@ -10,6 +10,8 @@ import ProjectSatisfactionList from "./pages/ProjectSatisfactionList";
 import ProjectScoringForm from "./pages/ProjectScoringForm";
 import ProjectReviewPDF from "./pages/ProjectReviewPDF";
 import PublicScoringForm from "./pages/PublicScoringForm";
+import ProductTypeForm from "./pages/ProductTypeForm";
+import ProductTypeList from "./pages/ProductTypeList";
 
 function App() {
   return (
@@ -68,6 +70,16 @@ function App() {
         }
       />
       <Route path="/public-scoring-form" element={<PublicScoringForm />} />
+      <Route
+        path="/product-type-list"
+        element={
+          <ProtectedRoute>
+            <ProductTypeList />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/product-type-form" element={<ProductTypeForm />} />
+      <Route path="/product-type-form/edit" element={<ProductTypeForm />} />
     </Routes>
   );
 }

@@ -47,6 +47,11 @@ const menuItems = [
     icon: <AddCircleOutlineIcon />,
     path: "/project-satisfaction",
   },
+  {
+    text: "Product Type",
+    icon: <AddCircleOutlineIcon />,
+    path: "/product-type-list",
+  },
   { text: "Logout", icon: <LogoutIcon />, path: "/logout" },
 ];
 

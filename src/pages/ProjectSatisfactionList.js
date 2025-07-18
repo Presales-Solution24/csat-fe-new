@@ -28,6 +28,7 @@ import {
 import {
   KeyboardArrowDown as ArrowDownIcon,
   KeyboardArrowUp as ArrowUpIcon,
+  Download as DownloadIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
@@ -102,7 +103,7 @@ export default function ProjectSatisfactionList() {
 
   const handleEdit = (e, projectId) => {
     e.stopPropagation();
-    navigate(`/project-satisfaction/edit?edit=${projectId}`);
+    navigate(`/project-satisfaction?edit=${projectId}`);
   };
 
   const handleAdd = () => {
@@ -134,6 +135,25 @@ export default function ProjectSatisfactionList() {
     }
   };
 
+  const handleExportExcel = async () => {
+    try {
+      const res = await API.get("/project-satisfaction/export/excel", {
+        responseType: "blob", // penting!
+      });
+
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "project_satisfaction_export.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Gagal export:", error);
+      alert("Export gagal. Silakan coba lagi.");
+    }
+  };
+
   return (
     <MainLayout>
       <Container sx={{ mt: 4 }}>
@@ -146,9 +166,18 @@ export default function ProjectSatisfactionList() {
           <Typography variant="h4" sx={{ fontWeight: 600 }}>
             📋 Project Satisfaction List
           </Typography>
-          <Button variant="contained" onClick={handleAdd}>
-            Add Project
-          </Button>
+          <Box display="flex" gap={1}>
+            <Button variant="contained" onClick={handleAdd}>
+              Add Project
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<DownloadIcon />}
+              onClick={handleExportExcel}
+            >
+              Export Excel
+            </Button>
+          </Box>
         </Box>
 
         <Box display="flex" gap={2} mb={2} flexWrap="wrap">

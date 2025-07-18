@@ -25,6 +25,7 @@ export default function ProductTypeForm() {
   const navigate = useNavigate();
   const editId = searchParams.get("edit");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [createdId, setCreatedId] = useState(null); // Untuk menyimpan ID hasil POST
 
   useEffect(() => {
     if (editId) fetchDetail(editId);
@@ -47,8 +48,10 @@ export default function ProductTypeForm() {
     try {
       if (editId) {
         await API.put(`/product-types/${editId}`, formData);
+        setCreatedId(editId); // gunakan ID yang sedang diedit
       } else {
-        await API.post("/product-types", formData);
+        const res = await API.post("/product-types", formData);
+        setCreatedId(res.data.id); // simpan ID yang baru dibuat
       }
       setDialogOpen(true);
     } catch (error) {
@@ -59,7 +62,11 @@ export default function ProductTypeForm() {
 
   const handleDialogClose = () => {
     setDialogOpen(false);
-    navigate("/product-type-list");
+    if (createdId) {
+      navigate(`/product-type-form?edit=${createdId}`);
+    } else {
+      navigate("/product-type-list");
+    }
   };
 
   return (

@@ -138,6 +138,24 @@ export default function ProjectSatisfactionForm() {
   };
 
   const handleSave = async () => {
+    if (!formData.namaPresales.trim()) {
+      setSnackbar({
+        open: true,
+        message: "Nama Presales harus diisi",
+        severity: "error",
+      });
+      return;
+    }
+
+    if (!formData.namaCompany.trim()) {
+      setSnackbar({
+        open: true,
+        message: "Nama Company harus diisi",
+        severity: "error",
+      });
+      return;
+    }
+
     const filteredTasks = tasks.filter((t) => t.task.trim() !== "");
     const dataToSave = { ...formData, tasks: filteredTasks };
     if (projectId) dataToSave.project_id = projectId;
@@ -153,7 +171,6 @@ export default function ProjectSatisfactionForm() {
         severity: "success",
       });
 
-      // Arahkan setelah 1.5 detik
       setTimeout(() => {
         navigate(`/project-satisfaction?edit=${id}`);
       }, 1500);
@@ -218,7 +235,7 @@ export default function ProjectSatisfactionForm() {
         </Typography>
         <Button
           variant="outlined"
-          color="primary"
+          color="secondary"
           sx={{ mb: 2 }}
           onClick={handleDownloadTemplate}
         >

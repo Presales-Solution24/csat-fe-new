@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Untuk JSON request
 export const API = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://uat-be.solution-core.com",
   headers: {
     "Content-Type": "application/json",
   },
@@ -11,7 +11,7 @@ export const API = axios.create({
 
 // Untuk FormData (upload Excel, dsb)
 export const API_FORM = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://uat-be.solution-core.com",
   // Jangan set Content-Type agar otomatis multipart/form-data
   // headers: {
   //   "Content-Type": "multipart/form-data",

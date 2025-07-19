@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { register } from './serviceWorkerRegistration';
 
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
@@ -17,3 +18,5 @@ root.render(
     </BrowserRouter>
   </ThemeProvider>
 );
+
+register();

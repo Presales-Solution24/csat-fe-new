@@ -28,6 +28,11 @@ import {
   AddCircleOutline as AddCircleOutlineIcon,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import CategoryIcon from "@mui/icons-material/Category";
+
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
@@ -39,22 +44,22 @@ const menuItems = [
   { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
   {
     text: "Project Satisfaction List",
-    icon: <ListAltIcon />,
+    icon: <AssignmentTurnedInIcon />,
     path: "/project-satisfaction-list",
   },
   {
     text: "Add Project Satisfaction",
-    icon: <AddCircleOutlineIcon />,
+    icon: <NoteAddIcon />,
     path: "/project-satisfaction",
   },
   {
     text: "Project Upload",
-    icon: <AddCircleOutlineIcon />,
+    icon: <UploadFileIcon />,
     path: "/project-upload",
   },
   {
     text: "Product Type",
-    icon: <AddCircleOutlineIcon />,
+    icon: <CategoryIcon />,
     path: "/product-type-list",
   },
   { text: "Logout", icon: <LogoutIcon />, path: "/logout" },
@@ -261,7 +266,11 @@ export default function MainLayout({ children }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancelLogout}>Batal</Button>
-          <Button onClick={handleConfirmLogout} color="error" variant="contained">
+          <Button
+            onClick={handleConfirmLogout}
+            color="error"
+            variant="contained"
+          >
             Logout
           </Button>
         </DialogActions>

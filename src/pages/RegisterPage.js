@@ -7,9 +7,16 @@ import {
   Box,
   Link,
   Alert,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import Logo from "../assets/euat_logo.png"; // Pastikan kamu punya file logo
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -20,6 +27,7 @@ export default function RegisterPage() {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -41,66 +49,105 @@ export default function RegisterPage() {
 
     try {
       await API.post("/register", { username, email, password });
-      navigate("/dashboard");
+      setSuccessDialogOpen(true);
     } catch (err) {
       setError(err.response?.data?.message || "Register gagal.");
     }
   };
 
+  const handleDialogClose = () => {
+    setSuccessDialogOpen(false);
+    navigate("/dashboard");
+  };
+
   return (
-    <Container maxWidth="xs" sx={{ mt: 10 }}>
-      <Typography variant="h5" align="center" gutterBottom>
-        Register
-      </Typography>
+    <Container maxWidth="xs" sx={{ mt: 8 }}>
+      <Paper elevation={4} sx={{ p: 4, borderRadius: 2 }}>
+        <Box textAlign="center" mb={2}>
+          <img
+            src={Logo}
+            alt="Logo Aplikasi"
+            width={64}
+            height={64}
+            style={{ marginBottom: 8 }}
+          />
+          <Typography variant="h5" fontWeight={600}>
+            Daftar Akun
+          </Typography>
+        </Box>
 
-      {error && <Alert severity="error">{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
 
-      <TextField
-        fullWidth
-        label="Username"
-        name="username"
-        margin="normal"
-        value={form.username}
-        onChange={handleChange}
-      />
-      <TextField
-        fullWidth
-        label="Email"
-        name="email"
-        margin="normal"
-        value={form.email}
-        onChange={handleChange}
-      />
-      <TextField
-        fullWidth
-        label="Password"
-        name="password"
-        type="password"
-        margin="normal"
-        value={form.password}
-        onChange={handleChange}
-      />
-      <TextField
-        fullWidth
-        label="Konfirmasi Password"
-        name="confirmPassword"
-        type="password"
-        margin="normal"
-        value={form.confirmPassword}
-        onChange={handleChange}
-      />
+        <TextField
+          fullWidth
+          label="Username"
+          name="username"
+          margin="normal"
+          value={form.username}
+          onChange={handleChange}
+        />
+        <TextField
+          fullWidth
+          label="Email"
+          name="email"
+          margin="normal"
+          type="email"
+          value={form.email}
+          onChange={handleChange}
+        />
+        <TextField
+          fullWidth
+          label="Password"
+          name="password"
+          type="password"
+          margin="normal"
+          value={form.password}
+          onChange={handleChange}
+        />
+        <TextField
+          fullWidth
+          label="Konfirmasi Password"
+          name="confirmPassword"
+          type="password"
+          margin="normal"
+          value={form.confirmPassword}
+          onChange={handleChange}
+        />
 
-      <Button
-        fullWidth
-        variant="contained"
-        sx={{ mt: 2 }}
-        onClick={handleRegister}
-      >
-        Register
-      </Button>
-      <Box textAlign="center" mt={2}>
-        <Link href="/">Sudah punya akun? Login</Link>
-      </Box>
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={handleRegister}
+          sx={{ mt: 2, py: 1.5 }}
+        >
+          Register
+        </Button>
+
+        <Box textAlign="center" mt={2}>
+          <Link href="/" underline="hover">
+            Sudah punya akun? Login
+          </Link>
+        </Box>
+      </Paper>
+
+      {/* ✅ Dialog sukses */}
+      <Dialog open={successDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Registrasi Berhasil</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Selamat! Akun kamu berhasil dibuat. Login terlebih dahulu.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} variant="contained" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

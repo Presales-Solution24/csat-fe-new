@@ -12,6 +12,7 @@ import ProjectReviewPDF from "./pages/ProjectReviewPDF";
 import PublicScoringForm from "./pages/PublicScoringForm";
 import ProductTypeForm from "./pages/ProductTypeForm";
 import ProductTypeList from "./pages/ProductTypeList";
+import ProjectSatisfactionUpload from "./pages/ProjectSatisfactionUpload";
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
       />
       <Route path="/product-type-form" element={<ProductTypeForm />} />
       <Route path="/product-type-form/edit" element={<ProductTypeForm />} />
+      <Route path="/project-upload" element={<ProjectSatisfactionUpload />} />
     </Routes>
   );
 }

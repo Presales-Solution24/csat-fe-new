@@ -48,6 +48,11 @@ const menuItems = [
     path: "/project-satisfaction",
   },
   {
+    text: "Project Upload",
+    icon: <AddCircleOutlineIcon />,
+    path: "/project-upload",
+  },
+  {
     text: "Product Type",
     icon: <AddCircleOutlineIcon />,
     path: "/product-type-list",
